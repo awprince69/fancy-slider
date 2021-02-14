@@ -33,7 +33,7 @@ const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+    .catch(err => displayError("Something Went Wrong!Please Try again Later"))
 }
 
 let slideIndex = 0;
@@ -45,7 +45,7 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    sliders.splice(sliders.indexOf(img),1);
+    sliders.splice(sliders.indexOf(img), 1);
   }
 }
 var timer
@@ -119,11 +119,17 @@ document.getElementById('search').addEventListener('keypress', function (event) 
 })
 
 searchBtn.addEventListener('click', function () {
-  document.querySelector('.main').style.display = 'none';
-  clearInterval(timer);
-  const search = document.getElementById('search');
-  getImages(search.value)
-  sliders.length = 0;
+  const inputValue = document.getElementById('search').value;
+  if (inputValue === '') {
+    alert('Search field must be filled out')
+    return;
+  } else {
+    document.querySelector('.main').style.display = 'none';
+    clearInterval(timer);
+    const search = document.getElementById('search');
+    getImages(search.value)
+    sliders.length = 0;
+  }
 })
 
 sliderBtn.addEventListener('click', function () {
@@ -132,12 +138,18 @@ sliderBtn.addEventListener('click', function () {
     createSlider()
   } else {
     alert("Duration cannot be negative")
+    return;
   }
 })
 
-const toggleSpinner = ()=>{
-  const spinner= document.getElementById('loadingSpinner')
-  const galleryContainer= document.getElementById('galleryContainer')
+const toggleSpinner = () => {
+  const spinner = document.getElementById('loadingSpinner')
+  const galleryContainer = document.getElementById('galleryContainer')
   spinner.classList.toggle('d-none');
   galleryContainer.classList.toggle('d-none');
+}
+
+const displayError=(error)=>{
+  const errorMessage = document.getElementById('errorMessage');
+  errorMessage.innerText = error;
 }
