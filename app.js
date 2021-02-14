@@ -32,20 +32,20 @@ const getImages = (query) => {
   toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hits))
-    .catch(err => displayError("Something Went Wrong!Please Try again Later"))
+    .then(data => showImages(data.hits))   //correct 'hits' spelling
+    .catch(err => console.log(err));
 }
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.toggle('added');
+  element.classList.toggle('added');     //add toggle to add/remove 'added' class.
 
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
   } else {
-    sliders.splice(sliders.indexOf(img), 1);
+    sliders.splice(sliders.indexOf(img), 1);  //clicked to deselect image.
   }
 }
 var timer
@@ -68,11 +68,11 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  const duration = document.getElementById('duration').value || 1000;  //correct id spelling
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
-    item.innerHTML = `<img class="w-100"
+    item.innerHTML = `<img class="w-100 slide-height"
     src="${slide}"
     alt="">`;
     sliderContainer.appendChild(item)
@@ -112,6 +112,7 @@ const changeSlide = (index) => {
   items[index].style.display = "block"
 }
 
+// add Enter Button
 document.getElementById('search').addEventListener('keypress', function (event) {
   if (event.key === 'Enter') {
     document.getElementById('search-btn').click();
@@ -119,6 +120,7 @@ document.getElementById('search').addEventListener('keypress', function (event) 
 })
 
 searchBtn.addEventListener('click', function () {
+  document.getElementById('duration').value='';
   const inputValue = document.getElementById('search').value;
   if (inputValue === '') {
     alert('Search field must be filled out')
@@ -142,14 +144,10 @@ sliderBtn.addEventListener('click', function () {
   }
 })
 
+//add toggle and loading spinner
 const toggleSpinner = () => {
   const spinner = document.getElementById('loadingSpinner')
   const galleryContainer = document.getElementById('galleryContainer')
   spinner.classList.toggle('d-none');
   galleryContainer.classList.toggle('d-none');
-}
-
-const displayError=(error)=>{
-  const errorMessage = document.getElementById('errorMessage');
-  errorMessage.innerText = error;
 }
